@@ -1,2 +1,2 @@
-This is my Project ..Bistro Boss Resturanet Meneger ...of
-Server Side Code.. name of bistro-boss-server
+This is my Project ..Todo redux Server side...of
+Server Side Code.. 
