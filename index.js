@@ -26,12 +26,22 @@ async function run() {
     const todoCollection = client.db("Todo").collection("Task");
 
     // Cards Collection
+    // app.get("/tasks", async (req, res) => {
+    //   const result = await todoCollection.find().toArray();
+    //   res.send(result);
+    // });   
+    
     app.get("/tasks", async (req, res) => {
-      const email = req.query.email;
-      const query = { email: email };
-      const result = await todoCollection.find(query).toArray();
-      res.send(result);
+      let query = {};
+      if (req.query.Priority) {
+        query.Priority = req.query.Priority;
+      }
+      const cursor = todoCollection.find(query);
+      const result = await cursor.toArray(query);
+      res.send({ status: true, data: result });
     });
+
+
 
     app.get("/tasks/:id", async (req, res) => {
       const id = req.params.id;
@@ -59,14 +69,15 @@ async function run() {
         $set: {
           title: todoData.title,
           description: todoData.description,
-          status: todoData.status,
-          property: todoData.property,
-          datetime: todoData.datetime
+          isCompleted: todoData.isCompleted,
+          Priority: todoData.Priority
         },
       };
       const result = await todoCollection.updateOne(filter, UpdateDoc);
       res.send(result);
     });
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
